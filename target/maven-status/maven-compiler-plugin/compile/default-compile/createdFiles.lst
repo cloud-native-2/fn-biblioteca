@@ -1,5 +1,0 @@
-cl\kemolinaj\fn\biblioteca\features\usuarios\model\Usuarios.class
-cl\kemolinaj\fn\biblioteca\features\usuarios\functions\CrearUsuarioFunction.class
-cl\kemolinaj\fn\biblioteca\shared\config\DatabaseConfig.class
-cl\kemolinaj\fn\biblioteca\features\usuarios\dtos\UsuarioRqDto.class
-cl\kemolinaj\fn\biblioteca\shared\config\WalletLoader.class
