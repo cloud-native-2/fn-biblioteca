@@ -1,12 +1,10 @@
 package cl.kemolinaj.fn.biblioteca.features.usuarios.service;
 
 import cl.kemolinaj.fn.biblioteca.features.usuarios.dtos.UsuarioDto;
+import cl.kemolinaj.fn.biblioteca.features.usuarios.dtos.UsuarioGraphQlDto;
 import cl.kemolinaj.fn.biblioteca.shared.config.DatabaseConfig;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -56,6 +54,30 @@ public class UsuarioService {
             }
         } catch (Exception e) {
             throw new RuntimeException("Error al validar existencia del usuario", e);
+        }
+    }
+
+    public UsuarioGraphQlDto obtenerUsuarioPorUsername(String username) {
+        String sql = "SELECT * FROM usuarios WHERE username = ?";
+        try (Connection conn = DatabaseConfig.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, username);
+
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    return new UsuarioGraphQlDto(
+                            rs.getString("username"),
+                            rs.getString("correo"),
+                            rs.getString("nom_completo"),
+                            rs.getString("run")
+                    );
+                } else {
+                    return null;
+                }
+            }
+
+        } catch (Exception e) {
+            throw new RuntimeException("Error al al buscar usuario", e);
         }
     }
 

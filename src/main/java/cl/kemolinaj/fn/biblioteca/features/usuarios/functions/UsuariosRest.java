@@ -18,7 +18,7 @@ public class UsuariosRest {
     public HttpResponseMessage restFunction(
             @HttpTrigger(name = "req",
                     methods = {HttpMethod.POST, HttpMethod.GET, HttpMethod.PUT, HttpMethod.DELETE},
-                    authLevel = AuthorizationLevel.FUNCTION)
+                    authLevel = AuthorizationLevel.ANONYMOUS)
             final HttpRequestMessage<Optional<UsuarioDto>> request,
             final ExecutionContext context
     ) {

@@ -20,7 +20,7 @@ public class PrestamosRest {
     public HttpResponseMessage restFunction(
             @HttpTrigger(name = "req",
                     methods = {HttpMethod.POST, HttpMethod.GET, HttpMethod.PUT, HttpMethod.DELETE},
-                    authLevel = AuthorizationLevel.FUNCTION)
+                    authLevel = AuthorizationLevel.ANONYMOUS)
             final HttpRequestMessage<Optional<PretamoRqDto>> request,
             final ExecutionContext context
     ) {
