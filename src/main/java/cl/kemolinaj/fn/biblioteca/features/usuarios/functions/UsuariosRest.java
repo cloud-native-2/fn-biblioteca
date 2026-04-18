@@ -46,7 +46,7 @@ public class UsuariosRest {
             };
         } catch (Exception e){
             context.getLogger().severe(e.getMessage());
-            return request.createResponseBuilder(HttpStatus.INTERNAL_SERVER_ERROR)
+            return request.createResponseBuilder(HttpStatus.METHOD_NOT_ALLOWED)
                     .body("Error API usuarios")
                     .build();
         }

@@ -38,19 +38,17 @@ public class PrestamosRest {
                             .body(crearPrestamo(context, request))
                             .build();
                 }
-                case GET -> {
-                    yield request.createResponseBuilder(HttpStatus.OK)
-                            .header("Content-Type", "application/json")
-                            .body(obtenerPrestamos(context))
-                            .build();
-                }
+                case GET -> request.createResponseBuilder(HttpStatus.OK)
+                        .header("Content-Type", "application/json")
+                        .body(obtenerPrestamos(context))
+                        .build();
                 default -> request.createResponseBuilder(HttpStatus.METHOD_NOT_ALLOWED)
                         .body("Método no permitido")
                         .build();
             } ;
         } catch (Exception e) {
             context.getLogger().severe("[Function: prestamos] Error processing request: " + e.getMessage());
-            return request.createResponseBuilder(HttpStatus.INTERNAL_SERVER_ERROR)
+            return request.createResponseBuilder(HttpStatus.METHOD_NOT_ALLOWED)
                     .body("Error interno del servidor")
                     .build();
         }

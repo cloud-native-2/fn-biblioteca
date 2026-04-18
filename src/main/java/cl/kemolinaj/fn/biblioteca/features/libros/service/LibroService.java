@@ -1,10 +1,10 @@
 package cl.kemolinaj.fn.biblioteca.features.libros.service;
 
-import cl.kemolinaj.fn.biblioteca.features.libros.dtos.EditorialGraphQlDto;
 import cl.kemolinaj.fn.biblioteca.features.libros.dtos.LibroGraphQlDto;
 import cl.kemolinaj.fn.biblioteca.features.libros.dtos.LibroRqDto;
 import cl.kemolinaj.fn.biblioteca.features.libros.dtos.LibroRsDto;
 import cl.kemolinaj.fn.biblioteca.shared.config.DatabaseConfig;
+import com.microsoft.azure.functions.ExecutionContext;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -26,13 +26,14 @@ public class LibroService {
         }
     }
 
-    public List<LibroRsDto> listarLibros() {
+    public List<LibroRsDto> listarLibros(final ExecutionContext context) {
+        context.getLogger().info("[Function: listarLibros] Buscando libros");
         List<LibroRsDto> listaLibroRsDto = new ArrayList<>();
         String sql = "SELECT id, nombre, editorial_id FROM libros";
         try (Connection conn = DatabaseConfig.getConnection();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
-
+            context.getLogger().info("[Function: listarLibros] Libros encontrados");
             while (rs.next()) {
                 LibroRsDto libro = new LibroRsDto(
                         rs.getLong("id"),
@@ -43,6 +44,8 @@ public class LibroService {
             }
 
         } catch (Exception e) {
+            context.getLogger().info("[Function: listarLibros] Error al listar libros");
+            context.getLogger().severe(e.getMessage());
             throw new RuntimeException("Error al listar libros", e);
         }
         return listaLibroRsDto;

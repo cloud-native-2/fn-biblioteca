@@ -44,7 +44,7 @@ public class LibrosRest {
                         .header("Content-Type", "application/json")
                         .body(obtenerLibros(context))
                         .build();
-                default -> request.createResponseBuilder(HttpStatus.INTERNAL_SERVER_ERROR)
+                default -> request.createResponseBuilder(HttpStatus.METHOD_NOT_ALLOWED)
                         .body("Error API libros")
                         .build();
             };
@@ -58,7 +58,7 @@ public class LibrosRest {
 
     private String obtenerLibros(final ExecutionContext context) {
         context.getLogger().info("[Function: obtenerLibros] init");
-        List<LibroRsDto> listaLibros = libroService.listarLibros();
+        List<LibroRsDto> listaLibros = libroService.listarLibros(context);
         context.getLogger().info("[Function: obtenerLibros] end");
         return ObjectUtil.objectToString(listaLibros);
     }

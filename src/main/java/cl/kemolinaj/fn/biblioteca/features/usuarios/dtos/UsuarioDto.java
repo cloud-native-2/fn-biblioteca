@@ -1,5 +1,6 @@
 package cl.kemolinaj.fn.biblioteca.features.usuarios.dtos;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import io.soabase.recordbuilder.core.RecordBuilder;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -11,6 +12,7 @@ import tools.jackson.databind.annotation.JsonNaming;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class UsuarioDto{
         public String username;
 
