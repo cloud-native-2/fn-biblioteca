@@ -59,11 +59,11 @@ public class UsuariosRest {
         return ObjectUtil.objectToString(listaLibros);
     }
 
-    private String crearUsuario(final ExecutionContext context, final HttpRequestMessage<Optional<UsuarioDto>> request) {
-        context.getLogger().info("[Function: crearLibro] init");
+    private UsuarioDto crearUsuario(final ExecutionContext context, final HttpRequestMessage<Optional<UsuarioDto>> request) {
+        context.getLogger().info("[Function: crearUsuario] init");
         UsuarioDto usuarioRq = request.getBody().get();
-        usuarioService.guardarUsuario(usuarioRq);
-        context.getLogger().info("[Function: crearLibro] end");
-        return "Libro creado exitosamente";
+        UsuarioDto usuarioCreado = usuarioService.guardarUsuario(usuarioRq, context.getLogger());
+        context.getLogger().info("[Function: crearUsuario] end");
+        return usuarioCreado;
     }
 }

@@ -51,6 +51,27 @@ public class LibroService {
         return listaLibroRsDto;
     }
 
+    public LibroRsDto buscarLibro(Long idLibro){
+        String sql = "SELECT * FROM libros WHERE id = ?";
+        try(Connection conn = DatabaseConfig.getConnection();
+            PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setLong(1, idLibro);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    return new LibroRsDto(
+                            rs.getLong("id"),
+                            rs.getString("nombre"),
+                            rs.getString("editorial_id")
+                    );
+                }
+            }
+        }catch (Exception e){
+            throw new RuntimeException("Error al buscar libro", e);
+        }
+        throw new RuntimeException("Libro no encontrado");
+    }
+
     public boolean existeLibroPorId(Long idLibro) {
         String sql = "SELECT 1 FROM libros WHERE id = ?";
         try (Connection conn = DatabaseConfig.getConnection();

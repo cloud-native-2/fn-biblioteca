@@ -11,6 +11,7 @@ import cl.kemolinaj.fn.biblioteca.shared.config.DatabaseConfig;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +20,7 @@ public class PrestamoService {
     private final UsuarioService usuarioService = new UsuarioService();
     private final LibroService libroService = new LibroService();
 
-    public void insertarPrestamo(PretamoRqDto prestamoRqDto) {
+    public PrestamoRsDto insertarPrestamo(PretamoRqDto prestamoRqDto) {
         // Validar existencia de usuario
         if (!usuarioService.existeUsuarioPorUsername(prestamoRqDto.getUsername())) {
             throw new IllegalArgumentException("Usuario no existe: " + prestamoRqDto.getUsername());
@@ -36,6 +37,8 @@ public class PrestamoService {
             pstmt.setString(2, prestamoRqDto.getUsername());
             pstmt.setLong(3, prestamoRqDto.getIdLibro());
             pstmt.executeUpdate();
+
+            return crearPrestamoRsDto(prestamoRqDto.getUsername(), prestamoRqDto.getIdLibro());
         } catch (Exception e) {
             throw new RuntimeException("Error al insertar el préstamo", e);
         }
@@ -63,6 +66,19 @@ public class PrestamoService {
             throw new RuntimeException("Error al listar préstamos", e);
         }
         return listaPrestamos;
+    }
+
+    private PrestamoRsDto crearPrestamoRsDto(String username, Long idLibro)  {
+        UsuarioDto usuarioDto = usuarioService.buscarUsuario(username);
+        LibroRsDto libroRsDto = libroService.buscarLibro(idLibro);
+
+        PrestamoRsDto rsDto = new PrestamoRsDto();
+        rsDto.setLibro(libroRsDto);
+        rsDto.setUsername(usuarioDto);
+        rsDto.setFechaEntrega(null);
+        rsDto.setFechaDevolucion(null);
+
+        return rsDto;
     }
 
 }

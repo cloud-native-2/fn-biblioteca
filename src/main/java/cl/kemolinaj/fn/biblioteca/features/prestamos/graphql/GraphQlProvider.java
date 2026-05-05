@@ -6,7 +6,6 @@ import cl.kemolinaj.fn.biblioteca.features.usuarios.dtos.UsuarioGraphQlDto;
 import cl.kemolinaj.fn.biblioteca.features.usuarios.service.UsuarioService;
 import graphql.GraphQL;
 import graphql.Scalars;
-import graphql.scalars.ExtendedScalars;
 import graphql.schema.DataFetcher;
 import graphql.schema.GraphQLInputObjectType;
 import graphql.schema.GraphQLObjectType;

@@ -64,8 +64,8 @@ public class PrestamosRest {
     private String crearPrestamo(final ExecutionContext context, final HttpRequestMessage<Optional<PretamoRqDto>> request) {
         context.getLogger().info("[Function: crearPrestamo] init");
         PretamoRqDto prestamoRqDto = request.getBody().get();
-        prestamoService.insertarPrestamo(prestamoRqDto);
+        PrestamoRsDto rsDto = prestamoService.insertarPrestamo(prestamoRqDto);
         context.getLogger().info("[Function: crearPrestamo] end");
-        return "Prestamo creado exitosamente";
+        return ObjectUtil.objectToString(rsDto);
     }
 }

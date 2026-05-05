@@ -7,6 +7,7 @@ import cl.kemolinaj.fn.biblioteca.shared.config.DatabaseConfig;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 public class UsuarioService {
     public List<UsuarioDto> listarUsuarios() {
@@ -30,7 +31,7 @@ public class UsuarioService {
         return listaUsuarioDto;
     }
 
-    public void guardarUsuario(UsuarioDto usuarioDto) {
+    public UsuarioDto guardarUsuario(UsuarioDto usuarioDto, Logger logger) {
         String sql = "INSERT INTO usuarios (username, correo, nom_completo, run) VALUES (?, ?, ?, ?)";
         try (Connection conn = DatabaseConfig.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -39,7 +40,10 @@ public class UsuarioService {
             pstmt.setString(3, usuarioDto.getNomCompleto());
             pstmt.setString(4, usuarioDto.getRun());
             pstmt.executeUpdate();
+
+            return usuarioDto;
         } catch (Exception e) {
+            logger.severe(e.getMessage());
             throw new RuntimeException("Error al guardar usuario", e);
         }
     }
@@ -54,6 +58,28 @@ public class UsuarioService {
             }
         } catch (Exception e) {
             throw new RuntimeException("Error al validar existencia del usuario", e);
+        }
+    }
+
+    public UsuarioDto buscarUsuario(String username){
+        String sql = "SELECT * FROM usuarios WHERE username = ?";
+        try (Connection conn = DatabaseConfig.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, username);
+            try (ResultSet resultSet = pstmt.executeQuery()) {
+                if (resultSet.next()) {
+                    return new UsuarioDto(
+                            resultSet.getString("username"),
+                            resultSet.getString("correo"),
+                            resultSet.getString("nom_completo"),
+                            resultSet.getString("run")
+                    );
+                }else {
+                    throw new RuntimeException("Usuario no encontrado");
+                }
+            }
+        } catch (Exception e){
+            throw new RuntimeException("Error al al buscar usuari", e);
         }
     }
 
